@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowers for you!</title>
+    <style>
+        /* --- General Reset & Background --- */
+        *, *::after, *::before {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #0b0718;
+            --color-glass: #264a5c;
+            --color-water: #1d3344;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            background-image: radial-gradient(circle at center, #1b1035 0%, #080410 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+            color: #fff;
+        }
+
+        /* --- Text Styling --- */
+        .header {
+            position: absolute;
+            top: 10%;
+            text-align: center;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .header p {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            letter-spacing: 1px;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        /* --- Music Button Styling --- */
+        .music-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- The Flower Scene Container --- */
+        .flower-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 15vh;
+        }
+
+        /* --- Glass Vase --- */
+        .vase {
+            width: 22vmin;
+            height: 30vmin;
+            background-color: rgba(38, 74, 92, 0.3);
+            background-image: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0) 20%, rgba(0,0,0,0.3) 90%);
+            clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
+            position: relative;
+            z-index: 5;
+            backdrop-filter: blur(5px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .vase::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 65%;
+            background-color: rgba(29, 51, 68, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- Individual Flowers & Stems --- */
+        .flower {
+            position: absolute;
+            bottom: 15vmin; /* Sits inside the vase */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+        }
+
+        /* Middle Flower (Main) */
+        .flower--1 {
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* Left Flower */
+        .flower--2 {
+            transform: translateX(-150%) rotate(-15deg) scale(0.9);
+            transform-origin: bottom center;
+        }
+
+        /* Right Flower */
+        .flower--3 {
+            transform: translateX(50%) rotate(15deg) scale(0.9);
+            transform-origin: bottom center;
+        }
+
+        /* The Stem */
+        .flower__stem {
+            width: 2vmin;
+            height: 40vmin;
+            background-image: linear-gradient(to top, #112818, #2a5934);
+            border-radius: 4px;
+            animation: grow-stem 2s ease-out forwards;
+            transform-origin: bottom center;
+        }
+
+        /* --- The Blooms --- */
+        .flower__wrap {
+            position: absolute;
+            top: 0;
+            transform: translateY(-50%);
+            animation: bloom 1.5s 1.5s ease-out both;
+        }
+
+        /* Exact flower__leaf styling from your code */
+        .flower__leaf {
+            position: absolute;
+            left: 50%;
+            bottom: 2vmin;
+            transform: translateX(-50%);
+            width: 5vmin;
+            height: 14vmin;
+            background-image: linear-gradient(
+                to bottom,
+                #ffa085,
+                #fa7373,
+                #1a233a 99%
+            );
+            clip-path: ellipse(50% 50% at 50% 50%);
+            transform-origin: center bottom;
+            animation: open-flower 2s 1s backwards;
+        }
+
+        /* Variations for different petals to make a full flower */
+        .flower__leaf--1 { transform: translateX(-50%) rotate(0deg); }
+        .flower__leaf--2 { transform: translateX(-50%) rotate(30deg); }
+        .flower__leaf--3 { transform: translateX(-50%) rotate(-30deg); }
+        .flower__leaf--4 { transform: translateX(-50%) rotate(60deg); }
+        .flower__leaf--5 { transform: translateX(-50%) rotate(-60deg); }
+        .flower__leaf--6 { transform: translateX(-50%) rotate(90deg); }
+        .flower__leaf--7 { transform: translateX(-50%) rotate(-90deg); }
+
+        /* Color variations for left and right flowers */
+        .flower--2 .flower__leaf {
+            background-image: linear-gradient(to bottom, #e475ff, #913ff3, #1a233a 99%);
+        }
+
+        .flower--3 .flower__leaf {
+            background-image: linear-gradient(to bottom, #ffe875, #f3973f, #1a233a 99%);
+        }
+
+        /* Flower Center */
+        .flower__center {
+            position: absolute;
+            width: 5vmin;
+            height: 5vmin;
+            background-color: #ffd700;
+            border-radius: 50%;
+            top: -2.5vmin;
+            left: -2.5vmin;
+            box-shadow: 0 0 20px #ffea75;
+            z-index: 10;
+            animation: bloom 1s 2s ease-out both;
+        }
+
+        /* --- Sparkles / Stars Background --- */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        /* --- Animations --- */
+        @keyframes open-flower {
+            0% {
+                transform: translateX(-50%) scale(0) rotate(0deg);
+            }
+        }
+
+        @keyframes grow-stem {
+            0% {
+                height: 0;
+            }
+        }
+
+        @keyframes bloom {
+            0% {
+                transform: translateY(-50%) scale(0);
+            }
+            100% {
+                transform: translateY(-50%) scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Element with a high-quality, chill lo-fi acoustic track -->
+    <audio id="bg-music" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Floating Play/Pause Button -->
+    <button class="music-btn" id="music-toggle-btn">
+        <span id="btn-icon">🎵</span> Play Music
+    </button>
+
+    <!-- Stars Background -->
+    <div class="star" style="top: 20%; left: 15%; animation-delay: 0.5s;"></div>
+    <div class="star" style="top: 35%; left: 80%; animation-delay: 1.2s;"></div>
+    <div class="star" style="top: 15%; left: 75%; animation-delay: 0.2s;"></div>
+    <div class="star" style="top: 50%; left: 10%; animation-delay: 2s;"></div>
+    <div class="star" style="top: 45%; left: 88%; animation-delay: 1.5s;"></div>
+
+    <div class="header">
+        <h1>Flowers for you!</h1>
+        <p>KLAITOT!!!</p>
+    </div>
+
+    <div class="flower-container">
+        
+        <!-- Left Flower (Purple) -->
+        <div class="flower flower--2">
+            <div class="flower__stem"></div>
+            <div class="flower__wrap">
+                <div class="flower__leaf flower__leaf--1"></div>
+                <div class="flower__leaf flower__leaf--2"></div>
+                <div class="flower__leaf flower__leaf--3"></div>
+                <div class="flower__leaf flower__leaf--4"></div>
+                <div class="flower__leaf flower__leaf--5"></div>
+                <div class="flower__leaf flower__leaf--6"></div>
+                <div class="flower__leaf flower__leaf--7"></div>
+                <div class="flower__center"></div>
+            </div>
+        </div>
+
+        <!-- Middle Flower (Pink/Coral) -->
+        <div class="flower flower--1">
+            <div class="flower__stem"></div>
+            <div class="flower__wrap">
+                <div class="flower__leaf flower__leaf--1"></div>
+                <div class="flower__leaf flower__leaf--2"></div>
+                <div class="flower__leaf flower__leaf--3"></div>
+                <div class="flower__leaf flower__leaf--4"></div>
+                <div class="flower__leaf flower__leaf--5"></div>
+                <div class="flower__leaf flower__leaf--6"></div>
+                <div class="flower__leaf flower__leaf--7"></div>
+                <div class="flower__center"></div>
+            </div>
+        </div>
+
+        <!-- Right Flower (Yellow/Orange) -->
+        <div class="flower flower--3">
+            <div class="flower__stem"></div>
+            <div class="flower__wrap">
+                <div class="flower__leaf flower__leaf--1"></div>
+                <div class="flower__leaf flower__leaf--2"></div>
+                <div class="flower__leaf flower__leaf--3"></div>
+                <div class="flower__leaf flower__leaf--4"></div>
+                <div class="flower__leaf flower__leaf--5"></div>
+                <div class="flower__leaf flower__leaf--6"></div>
+                <div class="flower__leaf flower__leaf--7"></div>
+                <div class="flower__center"></div>
+            </div>
+        </div>
+
+        <!-- Glass Vase -->
+        <div class="vase"></div>
+
+    </div>
+
+    <!-- JavaScript to Handle Playback -->
+    <script>
+        const music = document.getElementById('bg-music');
+        const btn = document.getElementById('music-toggle-btn');
+        const icon = document.getElementById('btn-icon');
+
+        // Set volume to a gentle level (40%)
+        music.volume = 0.4;
+
+        btn.addEventListener('click', () => {
+            if (music.paused) {
+                music.play();
+                icon.textContent = "⏸️";
+                btn.innerHTML = `<span id="btn-icon">⏸️</span> Pause`;
+            } else {
+                music.pause();
+                icon.textContent = "🎵";
+                btn.innerHTML = `<span id="btn-icon">🎵</span> Play Music`;
+            }
+        });
+    </script>
+
+</body>
+</html>
